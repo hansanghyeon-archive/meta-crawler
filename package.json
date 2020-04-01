@@ -1,0 +1,20 @@
+{
+  "name": "meta-crawler",
+  "version": "1.0.0",
+  "description": "open graph crawler",
+  "author": "Hansanghyeon <dandan9509@gmail.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "puppeteer",
+    "crawler"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.1",
+    "pug": "^2.0.4",
+    "puppeteer": "^2.1.1"
+  }
+}

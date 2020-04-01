@@ -1,5 +1,7 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
+const downloader = require('./imgUrlDownloader');
+
 const app = express();
 
 app.get('/', (req, res) => {
@@ -23,14 +25,20 @@ app.get('/:function', (req, res) => {
           data[key[1]] = value;
           return data;
         }));
+        const favicon = await page.$eval(`link[rel~='icon']`, el => el.getAttribute('href'));
+        console.log('favicon', favicon);
         console.log(meta);
-        meta.forEach(async og => {
+        downloader.imgUrlDownload({originalUrl: url, imgUrl: favicon, name: 'favicon'});
+        meta.forEach((og, index) => {
+          if (og.hasOwnProperty('image')) {
+            downloader.imgUrlDownload({originalUrl: url, imgUrl: og.image, name: 'thum'});
+            meta.splice(index, 1);
+          };
         })
-        // if (meta.hasOwnPropery('images')) {
-        // }
         await browser.close();
         return meta;
       })();
+      break;
     default: break;
   }
   

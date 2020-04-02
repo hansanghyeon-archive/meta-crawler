@@ -3,7 +3,7 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 
 const imgUrlDownloader = async ({originalUrl, imgUrl, name}) => {
-  const urlSlicer = new RegExp('(.*\/)(.+(ico|png|jpg|jpge))');
+  const urlSlicer = new RegExp('(.*\/)(.+(ico|png|jpg|jpeg))');
   const _ = urlSlicer.exec(imgUrl);
 
   const browser = await puppeteer.launch({

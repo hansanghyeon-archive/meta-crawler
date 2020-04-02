@@ -10,8 +10,8 @@
   "typescript.format.enable": false,
   "editor.formatOnSave": true,
   "workbench.colorCustomizations": {
-    "statusBar.background": "#2ea1b5",
-    "statusBarItem.hoverBackground": "#247d8c",
+    "statusBar.background": "#6cff7f",
+    "statusBarItem.hoverBackground": "#777777",
     "statusBar.foreground": "#15202b"
   }
 }

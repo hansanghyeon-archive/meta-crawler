@@ -6,4 +6,4 @@ services:
     ports:
       - "8080"
     volumes:
-      - ./usr/src/app/static:/static
+      - ./static:/app/static

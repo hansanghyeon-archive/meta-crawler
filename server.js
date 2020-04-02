@@ -13,7 +13,12 @@ app.get('/:function', (req, res) => {
     case 'seo':
       const {url} = req.query;
       (async () => {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+          ]
+        });
         const page = await browser.newPage();
         await page.goto(url);
 

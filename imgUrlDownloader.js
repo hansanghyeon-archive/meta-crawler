@@ -6,7 +6,12 @@ const imgUrlDownloader = async ({originalUrl, imgUrl, name}) => {
   const urlSlicer = new RegExp('(.*\/)(.+(ico|png|jpg|jpge))');
   const _ = urlSlicer.exec(imgUrl);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
+    ]
+  });
   const page = await browser.newPage();
   const viewSource = await page.goto(imgUrl);
 

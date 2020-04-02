@@ -15,6 +15,9 @@
     "puppeteer",
     "crawler"
   ],
+  "config": {
+    "port": "8080"
+  },
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.1",

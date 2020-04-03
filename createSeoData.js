@@ -20,46 +20,46 @@ module.exports.createSeoData = async ({ url }) => {
       return data;
     }),
   );
+  // 파비콘 찾고 추가
+  const favicon = await page.$eval(`link[rel~='icon']`, el => {
+    if (el) return el.getAttribute('href');
+  });
+  meta.push({ favicon });
+  // meta 하나의 객채로 변형
+  const metaData = {};
+  meta.forEach(og => {
+    const key = Object.keys(og)[0];
+    metaData[key] = og[key];
+  });
+  console.log(metaData);
 
-  // 섬네일작업 이미지 다운로드 및 json 리턴 값에 추가
-  meta.forEach(async (og, index) => {
-    if (og.hasOwnProperty('image')) {
-      const imgDirResult = await imgUrlDownload({
-        originalUrl: url,
-        imgUrl: og.image,
-        name: 'thum',
-      });
-      // 로컬 저장하고 배열에서 제거
-      // meta.splice(index, 1);
-      meta[index].image = imgDirResult;
+  const saveImg = async (property, imgUrl) => {
+    return `https://file.nas.hapas.io/meta-crawler/${await imgUrlDownload({
+      originalUrl: url,
+      imgUrl,
+      name: property,
+    })}`;
+  };
+  const isSaveImg = async property => {
+    if (metaData.hasOwnProperty(property)) {
+      // 이미지 URL이 absolute path인지 여기서 체크
+      const urlCracker = new RegExp('^(.*//)([A-Za-z0-9-.]+)(:[0-9]+)?(.*)$');
+      const _ = urlCracker.exec(metaData[property]);
+      const imgUrl = () => {
+        // `/` 으로 끝나는 요청사항이면 req url을 가져와서 이동하게 변경
+        if (_ !== null) return metaData[property];
+        return metaData.url.slice(0, -1) + metaData[property];
+      };
+
+      saveImg(property, imgUrl());
     }
-  });
-
-  // 파비콘작업 이미지 다운로드 및 json 리턴 값에 추가
-  const favicon = await page.$eval(`link[rel~='icon']`, el =>
-    el.getAttribute('href'),
-  );
-  const faviDirResult = await imgUrlDownload({
-    originalUrl: url,
-    imgUrl: favicon,
-    name: 'favicon',
-  });
-  meta.push({ favicon: faviDirResult });
-
+  };
+  // 섬네일 🚀
+  isSaveImg('image');
+  // 파비콘 🚀
+  isSaveImg('favicon');
   // Puppeteer 브라우저 닫기
   await browser.close();
 
-  // meta 하나의 객채로 변형
-  let result = {};
-  meta.forEach(og => {
-    const key = Object.keys(og)[0];
-    if (key === 'image' || key === 'favicon') {
-      result[key] = 'https://file.nas.hapas.io/meta-crawler/' + og[key];
-    } else {
-      result[key] = og[key];
-    }
-  });
-  console.log(result);
-
-  return result;
+  return metaData;
 };

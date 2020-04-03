@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const downloader = require('./imgUrlDownloader');
+const { imgUrlDownload } = require('./imgUrlDownloader');
 
 module.exports.createSeoData = async ({ url }) => {
   // Puppeteer 브라우저 셋팅
@@ -24,7 +24,7 @@ module.exports.createSeoData = async ({ url }) => {
   // 섬네일작업 이미지 다운로드 및 json 리턴 값에 추가
   meta.forEach(async (og, index) => {
     if (og.hasOwnProperty('image')) {
-      const imgDirResult = await downloader.imgUrlDownload({
+      const imgDirResult = await imgUrlDownload({
         originalUrl: url,
         imgUrl: og.image,
         name: 'thum',
@@ -39,12 +39,12 @@ module.exports.createSeoData = async ({ url }) => {
   const favicon = await page.$eval(`link[rel~='icon']`, el =>
     el.getAttribute('href'),
   );
-  const faviDir = await downloader.imgUrlDownload({
+  const faviDirResult = await imgUrlDownload({
     originalUrl: url,
     imgUrl: favicon,
     name: 'favicon',
   });
-  meta.push({ favicon: faviDir });
+  meta.push({ favicon: faviDirResult });
 
   // Puppeteer 브라우저 닫기
   await browser.close();

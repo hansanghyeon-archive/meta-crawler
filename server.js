@@ -12,7 +12,8 @@ app.get('/:function', (req, res) => {
       const { url } = req.query;
       (async () => {
         const result = await createSeoData({ url });
-        res.json(result);
+        if (result) res.json(result);
+        else res.json({});
       })();
       break;
     default:

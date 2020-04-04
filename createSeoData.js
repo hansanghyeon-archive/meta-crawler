@@ -46,26 +46,33 @@ module.exports.createSeoData = async ({ url }) => {
       name: property,
     })}`;
   };
+  const isAbsolutPath = property => {
+    // 이미지 URL이 absolute path인지 여기서 체크
+    const urlCracker = new RegExp('^(.*//)([A-Za-z0-9-.]+)(:[0-9]+)?(.*)$');
+    const _ = urlCracker.exec(metaData[property]);
+    if (_ !== null) return metaData[property];
+    return metaData.url.slice(0, -1) + metaData[property];
+  };
   const isSaveImg = async property => {
     if (metaData.hasOwnProperty(property)) {
-      // 이미지 URL이 absolute path인지 여기서 체크
-      const urlCracker = new RegExp('^(.*//)([A-Za-z0-9-.]+)(:[0-9]+)?(.*)$');
-      const _ = urlCracker.exec(metaData[property]);
-      const imgUrl = () => {
-        // `/` 으로 끝나는 요청사항이면 req url을 가져와서 이동하게 변경
-        if (_ !== null) return metaData[property];
-        return metaData.url.slice(0, -1) + metaData[property];
-      };
-
-      saveImg(property, imgUrl());
+      let d = {};
+      d[property] = await saveImg(property, isAbsolutPath(property));
+      return d;
     }
   };
-  // 섬네일 🚀
-  isSaveImg('image');
-  // 파비콘 🚀
-  isSaveImg('favicon');
-  // Puppeteer 브라우저 닫기
-  await browser.close();
 
-  return metaData;
+  return Promise.all([
+    // 섬네일 🚀
+    isSaveImg('image'),
+    // 파비콘 🚀
+    isSaveImg('favicon'),
+  ])
+    .then(e =>
+      e.map(obj => {
+        const key = Object.keys(obj)[0];
+        metaData[key] = obj[key];
+      }),
+    )
+    .then(() => metaData)
+    .catch(err => err);
 };

@@ -21,17 +21,23 @@ module.exports.createSeoData = async ({ url }) => {
     }),
   );
   // 파비콘 찾고 추가
-  const favicon = await page.$eval(`link[rel~='icon']`, el => {
-    if (el) return el.getAttribute('href');
-  });
-  meta.push({ favicon });
+  await page
+    .$eval(`link[rel~='icon']`, el => {
+      return el.href;
+    })
+    .then(favicon => {
+      meta.push({ favicon });
+    })
+    .catch(err => err);
+  // Puppeteer 브라우저 닫기
+  await browser.close();
+
   // meta 하나의 객채로 변형
   const metaData = {};
   meta.forEach(og => {
     const key = Object.keys(og)[0];
     metaData[key] = og[key];
   });
-  console.log(metaData);
 
   const saveImg = async (property, imgUrl) => {
     return `https://file.nas.hapas.io/meta-crawler/${await imgUrlDownload({

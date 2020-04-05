@@ -2,26 +2,23 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-const imgUrlDownloader = async ({originalUrl, imgUrl, name}) => {
-  const urlSlicer = new RegExp('(.*\/)(.+(ico|png|jpg|jpge))');
+const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
+  const urlSlicer = new RegExp('(.*/)(.+(ico|png|jpg|jpeg))');
   const _ = urlSlicer.exec(imgUrl);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
   const viewSource = await page.goto(imgUrl);
 
   // 디렉토리 있는지 체크 없으면 만들기
   // url 16진수로 변환 파일네임 생성
-  const isDir = ({originalUrl}) => {
-    return encodeURI(
-      originalUrl
-        .replace(new RegExp('/', 'g'), '%2F')
-        .replace(new RegExp('&', 'g'), '%26')
-        .replace(new RegExp(':', 'g'), '%3A')
-        .replace(new RegExp('=', 'g'), '%3D')
-    );
-  }
-  const createImg = async (dir) => {
+  const isDir = ({ originalUrl }) =>
+    encodeURI(originalUrl)
+      .replace(new RegExp('/', 'g'), '%2F')
+      .replace(new RegExp(':', 'g'), '%3A');
+  const createImg = async dir => {
     const fileDir = path.resolve(__dirname, 'static', dir);
     if (!fs.existsSync(fileDir)) {
       // 디렉토리 없음
@@ -37,8 +34,9 @@ const imgUrlDownloader = async ({originalUrl, imgUrl, name}) => {
         // console.log('The file was saved!');
       });
     }
-  }
-  createImg(isDir({originalUrl}));
-}
+  };
+  createImg(isDir({ originalUrl }));
+  return [encodeURI(isDir({ originalUrl })), `${name}.${_[3]}`].join('/');
+};
 
 module.exports.imgUrlDownload = imgUrlDownloader;

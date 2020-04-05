@@ -1,7 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
-const downloader = require('./imgUrlDownloader');
-
+const { createSeoData } = require('./createSeoData');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -11,38 +9,16 @@ app.get('/', (req, res) => {
 app.get('/:function', (req, res) => {
   switch (req.params.function) {
     case 'seo':
-      const {url} = req.query;
+      const { url } = req.query;
       (async () => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url);
-
-        const meta = await page.$$eval(`meta[property*='og:']`,data => data.map(d => {
-          let data = {};
-          const keyRegExp = new RegExp('og:(.+)');
-          const key = keyRegExp.exec(d.getAttribute('property'));
-          const value = d.getAttribute('content');
-          data[key[1]] = value;
-          return data;
-        }));
-        const favicon = await page.$eval(`link[rel~='icon']`, el => el.getAttribute('href'));
-        console.log('favicon', favicon);
-        console.log(meta);
-        downloader.imgUrlDownload({originalUrl: url, imgUrl: favicon, name: 'favicon'});
-        meta.forEach((og, index) => {
-          if (og.hasOwnProperty('image')) {
-            downloader.imgUrlDownload({originalUrl: url, imgUrl: og.image, name: 'thum'});
-            meta.splice(index, 1);
-          };
-        })
-        await browser.close();
-        return meta;
+        const result = await createSeoData({ url });
+        if (result) res.json(result);
+        else res.json({});
       })();
       break;
-    default: break;
+    default:
+      break;
   }
-  
-  res.send('🔥Meta Crawler');
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(8080);

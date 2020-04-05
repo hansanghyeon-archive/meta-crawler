@@ -1,6 +1,6 @@
 {
   "name": "meta-crawler",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "open graph crawler",
   "author": "Hansanghyeon <dandan9509@gmail.com>",
   "main": "server.js",

@@ -40,13 +40,11 @@ module.exports.createSeoData = async ({ url }) => {
   });
 
   const saveImg = async (property, imgUrl) => {
-    return `https://wp.hapas.io/wp-content/uploads/api/meta-crawler/${await imgUrlDownload(
-      {
-        originalUrl: url,
-        imgUrl,
-        name: property,
-      },
-    )}`;
+    return `https://fs.nas.hapas.io/meta-crawler/${await imgUrlDownload({
+      originalUrl: url,
+      imgUrl,
+      name: property,
+    })}`;
   };
   const isAbsolutPath = property => {
     // 이미지 URL이 absolute path인지 여기서 체크

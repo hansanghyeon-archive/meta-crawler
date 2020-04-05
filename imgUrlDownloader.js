@@ -36,7 +36,7 @@ const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
     }
   };
   createImg(isDir({ originalUrl }));
-  return [isDir({ originalUrl }), `${name}.${_[3]}`].join('/');
+  return [encodeURI(isDir({ originalUrl })), `${name}.${_[3]}`].join('/');
 };
 
 module.exports.imgUrlDownload = imgUrlDownloader;

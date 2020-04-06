@@ -24,6 +24,8 @@ COPY . .
 
 RUN npm install
 
+# Production
+RUN export NODE_ENV=production
 EXPOSE 8080
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["npm", "run", "start"]

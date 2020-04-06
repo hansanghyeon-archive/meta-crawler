@@ -1,6 +1,6 @@
 {
   "name": "meta-crawler",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "open graph crawler",
   "author": "Hansanghyeon <dandan9509@gmail.com>",
   "main": "server.js",
@@ -20,6 +20,8 @@
   },
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.16.1",
     "puppeteer": "^2.1.1"
   }

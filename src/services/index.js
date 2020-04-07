@@ -36,7 +36,7 @@ app.get('/:function', (req, res) => {
     case 'seo':
       const { url } = req.query;
       (async () => {
-        const result = await crawlingSeo({ url });
+        const result = await crawlingSeo({ mUrl: url });
         if (result) res.json(result);
         else res.json({});
       })();

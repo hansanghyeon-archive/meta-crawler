@@ -3,13 +3,13 @@ const puppeteer = require('puppeteer');
 // F
 const { imgUrlDownload } = require('../imgUrlDownloader');
 
-module.exports.crawlingSeo = async ({ url }) => {
+module.exports.crawlingSeo = async ({ mUrl }) => {
   // Puppeteer 브라우저 셋팅
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
-  await page.goto(url);
+  await page.goto(mUrl);
 
   // Meta data
   const meta = await page.$$eval(`meta[property*='og:']`, (data) =>
@@ -52,7 +52,7 @@ module.exports.crawlingSeo = async ({ url }) => {
 
   const saveImg = async (property, imgUrl) => {
     return `${process.env.FILE_SERVER_URI}${await imgUrlDownload({
-      originalUrl: url,
+      mUrl,
       imgUrl,
       name: property,
     })}`;

@@ -34,9 +34,10 @@ app.get('/', (req, res) => {
 app.get('/:function', (req, res) => {
   switch (req.params.function) {
     case 'seo':
-      const { url } = req.query;
+      const { m_url } = req.query;
+      isCrawlingSeo({ m_url });
       (async () => {
-        const result = await crawlingSeo({ m_url: url });
+        const result = await crawlingSeo({ m_url });
         if (result) res.json(result);
         else res.json({});
       })();

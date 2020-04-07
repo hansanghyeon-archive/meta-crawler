@@ -21,13 +21,22 @@ module.exports.crawlingSeo = async ({ m_url }) => {
       return data;
     }),
   );
-  // meta description
+  // 기본값 Description
   await page
     .$eval(`meta[name='description']`, (el) => {
-      return el.href;
+      return el.content;
     })
-    .then((desc) => {
-      meta.push({ desc });
+    .then((description) => {
+      meta.push({ description });
+    })
+    .catch((err) => err);
+  // 기본값 Title 태스 수집
+  await page
+    .$eval(`title`, (el) => {
+      return el.innerText;
+    })
+    .then((title) => {
+      meta.push({ title });
     })
     .catch((err) => err);
   // 파비콘 찾고 추가
@@ -46,8 +55,11 @@ module.exports.crawlingSeo = async ({ m_url }) => {
   const metaData = {};
   meta.forEach((og) => {
     const key = Object.keys(og)[0];
-    if (metaData[key]) metaData[key] = [metaData[key], og[key]];
-    else metaData[key] = og[key];
+    if (metaData[key]) {
+      if (typeof metaData[key] === 'string')
+        metaData[key] = [metaData[key], og[key]];
+      else metaData[key] = [...metaData[key], og[key]];
+    } else metaData[key] = og[key];
   });
 
   const saveImg = async (property, imgUrl) => {
@@ -73,10 +85,14 @@ module.exports.crawlingSeo = async ({ m_url }) => {
   ])
     .then((e) =>
       e.map((obj) => {
-        const key = Object.keys(obj)[0];
-        metaData[key] = obj[key];
+        if (obj !== undefined) {
+          const key = Object.keys(obj)[0];
+          metaData[key] = obj[key];
+        }
       }),
     )
-    .then(() => metaData)
+    .then(() => {
+      return metaData;
+    })
     .catch((err) => err);
 };

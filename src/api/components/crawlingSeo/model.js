@@ -7,8 +7,8 @@ const seoSchema = new mongoose.Schema(
     // 크롤링한 데이터
     title: { type: String, required: true },
     description: { type: String, define: false },
-    thumbnail_url: { type: String, define: false },
-    favicon_url: { type: String, define: false },
+    image: { type: String, define: false },
+    favicon: { type: String, define: false },
   },
   {
     timestamps: true,

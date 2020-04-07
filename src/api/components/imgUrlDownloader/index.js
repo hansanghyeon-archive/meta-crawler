@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
+module.exports.imgUrlDownload = async ({ originalUrl, imgUrl, name }) => {
   const urlSlicer = new RegExp('(.*/)(.+(ico|png|jpg|jpeg))');
   const _ = urlSlicer.exec(imgUrl);
 
@@ -19,7 +19,15 @@ const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
       .replace(new RegExp('/', 'g'), '%2F')
       .replace(new RegExp(':', 'g'), '%3A');
   const createImg = async (dir) => {
-    const fileDir = path.resolve(__dirname, '..', 'static', dir);
+    const fileDir = path.resolve(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      '..',
+      'static',
+      dir,
+    );
     if (!fs.existsSync(fileDir)) {
       fs.mkdirSync(fileDir);
       createImg(dir);
@@ -36,5 +44,3 @@ const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
   createImg(isDir({ originalUrl }));
   return [encodeURI(isDir({ originalUrl })), `${name}.${_[3]}`].join('/');
 };
-
-module.exports.imgUrlDownload = imgUrlDownloader;

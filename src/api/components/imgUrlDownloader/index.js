@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
 
-module.exports.imgUrlDownload = async ({ mUrl, imgUrl, name }) => {
+module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
   const urlSlicer = new RegExp('(.*/)(.+(ico|png|jpg|jpeg))');
   const _ = urlSlicer.exec(imgUrl);
 
@@ -14,8 +14,8 @@ module.exports.imgUrlDownload = async ({ mUrl, imgUrl, name }) => {
 
   // 디렉토리 있는지 체크 없으면 만들기
   // url 16진수로 변환 파일네임 생성
-  const isDir = ({ mUrl }) =>
-    encodeURI(mUrl)
+  const isDir = ({ m_url }) =>
+    encodeURI(m_url)
       .replace(new RegExp('/', 'g'), '%2F')
       .replace(new RegExp(':', 'g'), '%3A');
   const createImg = async (dir) => {
@@ -41,6 +41,6 @@ module.exports.imgUrlDownload = async ({ mUrl, imgUrl, name }) => {
       });
     }
   };
-  createImg(isDir({ mUrl }));
-  return [encodeURI(isDir({ mUrl })), `${name}.${_[3]}`].join('/');
+  createImg(isDir({ m_url }));
+  return [encodeURI(isDir({ m_url })), `${name}.${_[3]}`].join('/');
 };

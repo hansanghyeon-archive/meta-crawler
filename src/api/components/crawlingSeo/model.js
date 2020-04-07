@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Define Schemes
 const seoSchema = new mongoose.Schema(
   {
-    curl: { type: String, required: true, unique: true },
+    m_url: { type: String, required: true, unique: true },
     // 크롤링한 데이터
     title: { type: String, required: true },
     description: { type: String, define: false },

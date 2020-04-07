@@ -11,7 +11,6 @@ const seoSchema = new mongoose.Schema(
     favicon: { type: String, define: false },
   },
   {
-    timestamps: true,
     collection: 'meta-crawler',
   },
 );

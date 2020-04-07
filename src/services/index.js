@@ -8,7 +8,6 @@ const app = express();
 const port = process.env.PORT || 8080;
 const db = require('./db');
 // FUNCTIONS
-const { crawlingSeo } = require('../api/components/crawlingSeo');
 const { isCrawlingSeo } = require('../api/components/isCrawlingSeo');
 
 // Node.js의 native Promise 사용
@@ -27,7 +26,6 @@ app.all('/*', (req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  isCrawlingSeo();
   res.send('🔥Meta Crawler');
 });
 
@@ -35,9 +33,8 @@ app.get('/:function', (req, res) => {
   switch (req.params.function) {
     case 'seo':
       const { m_url } = req.query;
-      isCrawlingSeo({ m_url });
       (async () => {
-        const result = await crawlingSeo({ m_url });
+        const result = await isCrawlingSeo({ m_url });
         if (result) res.json(result);
         else res.json({});
       })();

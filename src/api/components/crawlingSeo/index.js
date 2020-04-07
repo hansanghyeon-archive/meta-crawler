@@ -57,17 +57,10 @@ module.exports.crawlingSeo = async ({ url }) => {
       name: property,
     })}`;
   };
-  const isAbsolutPath = (property) => {
-    // 이미지 URL이 absolute path인지 여기서 체크
-    const urlCracker = new RegExp('^(.*//)([A-Za-z0-9-.]+)(:[0-9]+)?(.*)$');
-    const _ = urlCracker.exec(metaData[property]);
-    if (_ !== null) return metaData[property];
-    return metaData.url.slice(0, -1) + metaData[property];
-  };
   const isSaveImg = async (property) => {
     if (metaData.hasOwnProperty(property)) {
       let d = {};
-      d[property] = await saveImg(property, isAbsolutPath(property));
+      d[property] = await saveImg(property, metaData[property]);
       return d;
     }
   };

@@ -12,27 +12,24 @@ module.exports.crawlingSeo = async ({ url }) => {
   await page.goto(url);
 
   // Meta data
-  const meta = await page.$$eval(`meta[content]`, (data) =>
+  const meta = await page.$$eval(`meta[property*='og:']`, (data) =>
     data.map((d) => {
       let data = {};
-      const isName = d.hasAttribute('name');
-      const isProperty = d.hasAttribute('property');
-      const content = d.getAttribute('content');
-
-      if (isProperty)
-        data[d.getAttribute('property').replace(/og:/, '')] = content;
-      if (isName) {
-        const name = d.getAttribute('name');
-        const isDescription = name.indexOf('description') === 0;
-        const isTwitter = name.indexOf('twitter') === 0;
-        if (isTwitter) {
-          data[name] = content;
-        }
-      }
+      const key = d.getAttribute('property').replace('og:', '');
+      const value = d.getAttribute('content');
+      data[key] = value;
       return data;
     }),
   );
-  console.log(meta);
+  // meta description
+  await page
+    .$eval(`meta[name='description']`, (el) => {
+      return el.href;
+    })
+    .then((desc) => {
+      meta.push({ desc });
+    })
+    .catch((err) => err);
   // 파비콘 찾고 추가
   await page
     .$eval(`link[rel~='icon']`, (el) => {
@@ -49,7 +46,8 @@ module.exports.crawlingSeo = async ({ url }) => {
   const metaData = {};
   meta.forEach((og) => {
     const key = Object.keys(og)[0];
-    metaData[key] = og[key];
+    if (metaData[key]) metaData[key] = [metaData[key], og[key]];
+    else metaData[key] = og[key];
   });
 
   const saveImg = async (property, imgUrl) => {

@@ -35,9 +35,7 @@ module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
       const filePath = path.resolve(fileDir, `${name}.${_[3]}`);
       const writeStream = fs.createWriteStream(filePath);
       writeStream.write(await viewSource.buffer(), (err) => {
-        if (err) console.log(err);
-        // The file was saved!
-        console.log('The file was saved!');
+        if (err) console.error(err);
       });
     }
   };

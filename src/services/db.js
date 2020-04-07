@@ -9,7 +9,6 @@ module.exports = () => {
       },
       (err) => {
         if (err) console.error('mongodb connection error', err);
-        console.log('Successfully connected to mongodb');
       },
     );
   }

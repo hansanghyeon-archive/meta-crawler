@@ -1,9 +1,9 @@
 // DEPENDENCIES
 const puppeteer = require('puppeteer');
 // F
-const { imgUrlDownload } = require('./imgUrlDownloader');
+const { imgUrlDownload } = require('../imgUrlDownloader');
 
-module.exports.createSeoData = async ({ url }) => {
+module.exports.crawlingSeo = async ({ url }) => {
   // Puppeteer 브라우저 셋팅
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -42,7 +42,7 @@ module.exports.createSeoData = async ({ url }) => {
   });
 
   const saveImg = async (property, imgUrl) => {
-    return `https://fs.nas.hapas.io/meta-crawler/${await imgUrlDownload({
+    return `${process.env.FILE_SERVER_URI}${await imgUrlDownload({
       originalUrl: url,
       imgUrl,
       name: property,

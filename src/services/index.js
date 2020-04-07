@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
 
 const app = express();
 const port = process.env.PORT || 8080;
-const db = require('../models/db');
+const db = require('./db');
 // FUNCTIONS
-const { createSeoData } = require('../createSeoData');
+const { crawlingSeo } = require('../api/components/crawlingSeo');
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
@@ -34,7 +34,7 @@ app.get('/:function', (req, res) => {
     case 'seo':
       const { url } = req.query;
       (async () => {
-        const result = await createSeoData({ url });
+        const result = await crawlingSeo({ url });
         if (result) res.json(result);
         else res.json({});
       })();

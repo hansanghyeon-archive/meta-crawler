@@ -29,7 +29,7 @@ const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
       writeStream.write(await viewSource.buffer(), (err) => {
         if (err) console.log(err);
         // The file was saved!
-        // console.log('The file was saved!');
+        console.log('The file was saved!');
       });
     }
   };

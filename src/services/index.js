@@ -9,6 +9,7 @@ const port = process.env.PORT || 8080;
 const db = require('./db');
 // FUNCTIONS
 const { crawlingSeo } = require('../api/components/crawlingSeo');
+const { isCrawlingSeo } = require('../api/components/isCrawlingSeo');
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;
@@ -26,6 +27,7 @@ app.all('/*', (req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  isCrawlingSeo();
   res.send('🔥Meta Crawler');
 });
 

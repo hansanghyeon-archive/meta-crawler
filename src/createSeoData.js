@@ -1,4 +1,6 @@
+// DEPENDENCIES
 const puppeteer = require('puppeteer');
+// F
 const { imgUrlDownload } = require('./imgUrlDownloader');
 
 module.exports.createSeoData = async ({ url }) => {
@@ -10,8 +12,8 @@ module.exports.createSeoData = async ({ url }) => {
   await page.goto(url);
 
   // Meta data
-  const meta = await page.$$eval(`meta[property*='og:']`, data =>
-    data.map(d => {
+  const meta = await page.$$eval(`meta[property*='og:']`, (data) =>
+    data.map((d) => {
       let data = {};
       const keyRegExp = new RegExp('og:(.+)');
       const key = keyRegExp.exec(d.getAttribute('property'));
@@ -22,19 +24,19 @@ module.exports.createSeoData = async ({ url }) => {
   );
   // 파비콘 찾고 추가
   await page
-    .$eval(`link[rel~='icon']`, el => {
+    .$eval(`link[rel~='icon']`, (el) => {
       return el.href;
     })
-    .then(favicon => {
+    .then((favicon) => {
       meta.push({ favicon });
     })
-    .catch(err => err);
+    .catch((err) => err);
   // Puppeteer 브라우저 닫기
   await browser.close();
 
   // meta 하나의 객채로 변형
   const metaData = {};
-  meta.forEach(og => {
+  meta.forEach((og) => {
     const key = Object.keys(og)[0];
     metaData[key] = og[key];
   });
@@ -46,14 +48,14 @@ module.exports.createSeoData = async ({ url }) => {
       name: property,
     })}`;
   };
-  const isAbsolutPath = property => {
+  const isAbsolutPath = (property) => {
     // 이미지 URL이 absolute path인지 여기서 체크
     const urlCracker = new RegExp('^(.*//)([A-Za-z0-9-.]+)(:[0-9]+)?(.*)$');
     const _ = urlCracker.exec(metaData[property]);
     if (_ !== null) return metaData[property];
     return metaData.url.slice(0, -1) + metaData[property];
   };
-  const isSaveImg = async property => {
+  const isSaveImg = async (property) => {
     if (metaData.hasOwnProperty(property)) {
       let d = {};
       d[property] = await saveImg(property, isAbsolutPath(property));
@@ -67,12 +69,12 @@ module.exports.createSeoData = async ({ url }) => {
     // 파비콘 🚀
     isSaveImg('favicon'),
   ])
-    .then(e =>
-      e.map(obj => {
+    .then((e) =>
+      e.map((obj) => {
         const key = Object.keys(obj)[0];
         metaData[key] = obj[key];
       }),
     )
     .then(() => metaData)
-    .catch(err => err);
+    .catch((err) => err);
 };

@@ -18,17 +18,15 @@ const imgUrlDownloader = async ({ originalUrl, imgUrl, name }) => {
     encodeURI(originalUrl)
       .replace(new RegExp('/', 'g'), '%2F')
       .replace(new RegExp(':', 'g'), '%3A');
-  const createImg = async dir => {
-    const fileDir = path.resolve(__dirname, 'static', dir);
+  const createImg = async (dir) => {
+    const fileDir = path.resolve(__dirname, '..', 'static', dir);
     if (!fs.existsSync(fileDir)) {
-      // 디렉토리 없음
-      // console.log('디렉토리 없음');
       fs.mkdirSync(fileDir);
       createImg(dir);
     } else {
       const filePath = path.resolve(fileDir, `${name}.${_[3]}`);
       const writeStream = fs.createWriteStream(filePath);
-      writeStream.write(await viewSource.buffer(), err => {
+      writeStream.write(await viewSource.buffer(), (err) => {
         if (err) console.log(err);
         // The file was saved!
         // console.log('The file was saved!');

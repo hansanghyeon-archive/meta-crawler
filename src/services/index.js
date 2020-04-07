@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
 
 const app = express();
 const port = process.env.PORT || 8080;
-const db = require('./db');
+const db = require('../models/db');
 // FUNCTIONS
-const { createSeoData } = require('./createSeoData');
+const { createSeoData } = require('../createSeoData');
 
 // Node.js의 native Promise 사용
 mongoose.Promise = global.Promise;

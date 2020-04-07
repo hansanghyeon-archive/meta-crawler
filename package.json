@@ -9,15 +9,12 @@
     "url": "https://github.com/Hansanghyeon/meta-crawler"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/services/index.js"
   },
   "keywords": [
     "puppeteer",
     "crawler"
   ],
-  "config": {
-    "port": "8080"
-  },
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

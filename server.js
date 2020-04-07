@@ -1,16 +1,25 @@
+// ENV
+require('dotenv').config();
+// DEPENDENCIES
 const express = require('express');
-const path = require('path');
-const dotenv = require('dotenv');
-const { createSeoData } = require('./createSeoData');
-const app = express();
+const mongoose = require('mongoose');
 
-dotenv.config({ path: path.join(__dirname, '.env') });
+const app = express();
+const port = process.env.PORT || 8080;
+const db = require('./db');
+// FUNCTIONS
+const { createSeoData } = require('./createSeoData');
+
+// Node.js의 native Promise 사용
+mongoose.Promise = global.Promise;
+
+// CONNECT To MONGODB SERVER
+db();
 
 app.all('/*', (req, res, next) => {
-  console.log(process.env.NODE_ENV);
   res.header(
     'Access-Control-Allow-Origin',
-    process.env.NODE_ENV === 'production' ? 'https://4log.hapas.io/' : '*',
+    process.env.NODE_ENV === 'production' ? process.env.ORIGIN : '*',
   );
   res.header('Access-Control-Allow-Headers', 'X-Requested-With');
   next();
@@ -35,4 +44,4 @@ app.get('/:function', (req, res) => {
   }
 });
 
-app.listen(8080);
+app.listen(port);

@@ -12,16 +12,27 @@ module.exports.crawlingSeo = async ({ url }) => {
   await page.goto(url);
 
   // Meta data
-  const meta = await page.$$eval(`meta[property*='og:']`, (data) =>
+  const meta = await page.$$eval(`meta[content]`, (data) =>
     data.map((d) => {
       let data = {};
-      const keyRegExp = new RegExp('og:(.+)');
-      const key = keyRegExp.exec(d.getAttribute('property'));
-      const value = d.getAttribute('content');
-      data[key[1]] = value;
+      const isName = d.hasAttribute('name');
+      const isProperty = d.hasAttribute('property');
+      const content = d.getAttribute('content');
+
+      if (isProperty)
+        data[d.getAttribute('property').replace(/og:/, '')] = content;
+      if (isName) {
+        const name = d.getAttribute('name');
+        const isDescription = name.indexOf('description') === 0;
+        const isTwitter = name.indexOf('twitter') === 0;
+        if (isTwitter) {
+          data[name] = content;
+        }
+      }
       return data;
     }),
   );
+  console.log(meta);
   // 파비콘 찾고 추가
   await page
     .$eval(`link[rel~='icon']`, (el) => {

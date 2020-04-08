@@ -15,8 +15,9 @@ module.exports.crawlingSeo = async ({ m_url }) => {
   const meta = await page.$$eval(`meta[property*='og:']`, (data) =>
     data.map((d) => {
       let data = {};
-      const key = d.getAttribute('property').replace('og:', '');
+      let key = d.getAttribute('property').replace('og:', '');
       const value = d.getAttribute('content');
+      if (key === 'title' || key === 'descrpition') key += 'og:' + key;
       data[key] = value;
       return data;
     }),
@@ -55,11 +56,7 @@ module.exports.crawlingSeo = async ({ m_url }) => {
   const metaData = {};
   meta.forEach((og) => {
     const key = Object.keys(og)[0];
-    if (metaData[key]) {
-      if (typeof metaData[key] === 'string')
-        metaData[key] = [metaData[key], og[key]];
-      else metaData[key] = [...metaData[key], og[key]];
-    } else metaData[key] = og[key];
+    if (key.indexOf('og:') === -1) metaData[key] = og[key];
   });
 
   const saveImg = async (property, imgUrl) => {

@@ -3,9 +3,10 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 
 module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
-  const urlSlicer = new RegExp('(ico|png|jpg|jpeg|s=.+&v=.+)');
+  const urlSlicer = new RegExp('(ico|png|jpg|jpeg)');
   const _ = urlSlicer.exec(imgUrl);
-  const exr = _[1].indexOf('s=') > -1 ? 'png' : _[1];
+  const exr =
+    _ === null && imgUrl.indexOf('githubusercontent') > -1 ? 'png' : _[1];
 
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],

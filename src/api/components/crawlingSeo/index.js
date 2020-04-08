@@ -89,7 +89,8 @@ module.exports.crawlingSeo = async ({ m_url }) => {
       }),
     )
     .then(() => {
+      console.log(metaData);
       return metaData;
     })
-    .catch((err) => err);
+    .catch((err) => console.log(err));
 };

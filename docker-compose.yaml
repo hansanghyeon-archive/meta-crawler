@@ -11,7 +11,7 @@ services:
       - DB=admin
       - FILE_SERVER_URI=https://fs.nas.hapas.io/meta-crawler/
       # PRODUCTION BUILD
-      # - ORIGIN=https://4log.hapas.io/
+      # - ORIGIN=https://4log.hapas.io
       # - NODE_ENV=production
     volumes:
       - ./static:/app/static

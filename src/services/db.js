@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 module.exports = () => {
   function connect() {
     mongoose.connect(
-      process.env.MONGO_URI,
+      `mongodb://admin:admin@${process.env.DB_HOST || 'localhost'}:27017/${
+        process.env.DB
+      }`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,

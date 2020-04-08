@@ -5,10 +5,14 @@ services:
     container_name: meta-crawler-node
     image: docker.pkg.github.com/hansanghyeon/meta-crawler/meta-crawler:1.1.1
     ports:
-      - '8080'
+      - 32771:8080
     environment:
       - DB_HOST=meta-crawler-mongodb
       - DB=admin
+      - FILE_SERVER_URI=https://fs.nas.hapas.io/meta-crawler/
+      # PRODUCTION BUILD
+      # - ORIGIN=https://4log.hapas.io/
+      # - NODE_ENV=production
     volumes:
       - ./static:/app/static
     networks:

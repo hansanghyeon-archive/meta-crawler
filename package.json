@@ -1,7 +1,7 @@
 {
   "name": "meta-crawler",
-  "version": "1.0.4",
-  "description": "open graph crawler",
+  "version": "1.1.4",
+  "description": "url meta data crawler",
   "author": "Hansanghyeon <dandan9509@gmail.com>",
   "main": "server.js",
   "repository": {
@@ -9,20 +9,18 @@
     "url": "https://github.com/Hansanghyeon/meta-crawler"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/services/index.js"
   },
   "keywords": [
     "puppeteer",
     "crawler"
   ],
-  "config": {
-    "port": "8080"
-  },
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.16.1",
+    "mongoose": "^5.9.7",
     "puppeteer": "^2.1.1"
   }
 }

@@ -1,9 +1,34 @@
 version: '3.1'
 
 services:
-  meta_crawler:
-    image: docker.pkg.github.com/hansanghyeon/meta-crawler/meta-crawler:1.0.3
+  node:
+    container_name: meta-crawler-node
+    image: docker.pkg.github.com/hansanghyeon/meta-crawler/meta-crawler:1.1.4
     ports:
-      - '8080'
+      - 32771:8080
+    environment:
+      - DB_HOST=meta-crawler-mongodb
+      - DB=admin
+      - FILE_SERVER_URI=https://fs.nas.hapas.io/meta-crawler/
+      # PRODUCTION BUILD
+      # - ORIGIN=https://4log.hapas.io
+      # - NODE_ENV=production
     volumes:
       - ./static:/app/static
+    networks:
+      - backend
+  mongodb:
+    container_name: meta-crawler-mongodb
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+volumes:
+  mongo:

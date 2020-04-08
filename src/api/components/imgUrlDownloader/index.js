@@ -3,8 +3,9 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 
 module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
-  const urlSlicer = new RegExp('(.*/)(.+(ico|png|jpg|jpeg))');
+  const urlSlicer = new RegExp('(ico|png|jpg|jpeg|s=.+&v=.+)');
   const _ = urlSlicer.exec(imgUrl);
+  const exr = _[1].indexOf('s=') > -1 ? 'png' : _[1];
 
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -32,7 +33,7 @@ module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
       fs.mkdirSync(fileDir);
       createImg(dir);
     } else {
-      const filePath = path.resolve(fileDir, `${name}.${_[3]}`);
+      const filePath = path.resolve(fileDir, `${name}.${exr}`);
       const writeStream = fs.createWriteStream(filePath);
       writeStream.write(await viewSource.buffer(), (err) => {
         if (err) console.error(err);
@@ -40,5 +41,5 @@ module.exports.imgUrlDownload = async ({ m_url, imgUrl, name }) => {
     }
   };
   createImg(isDir({ m_url }));
-  return [encodeURI(isDir({ m_url })), `${name}.${_[3]}`].join('/');
+  return [encodeURI(isDir({ m_url })), `${name}.${exr}`].join('/');
 };

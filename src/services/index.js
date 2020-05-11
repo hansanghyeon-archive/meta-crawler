@@ -26,22 +26,14 @@ app.all('/*', (req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('🔥Meta Crawler');
-});
-
-app.get('/:function', (req, res) => {
-  switch (req.params.function) {
-    case 'seo':
-      const { m_url } = req.query;
-      (async () => {
-        const result = await isCrawlingSeo({ m_url });
-        if (result) res.json(result);
-        else res.json({});
-      })();
-      break;
-    default:
-      break;
-  }
+  if (Object.keys(req.query).length !== 0) {
+    const { m_url } = req.query;
+    (async () => {
+      const result = await isCrawlingSeo({ m_url });
+      if (result) res.json(result);
+      else res.json({});
+    })();
+  } else res.send('🔥Meta Crawler');
 });
 
 app.listen(port);

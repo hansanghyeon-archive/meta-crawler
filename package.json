@@ -9,7 +9,8 @@
     "url": "https://github.com/Hansanghyeon/meta-crawler"
   },
   "scripts": {
-    "start": "node src/services/index.js"
+    "start": "node src/services/index.js",
+    "build": "sh docker-build.sh"
   },
   "keywords": [
     "puppeteer",

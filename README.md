@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./static/thumbnail.gif" />
+  <img  style="border-radius: 16px; padding: 8px;" src="./static/thumbnail.gif" />
 </p>
 
 ## meta-crawler

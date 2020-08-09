@@ -151,6 +151,6 @@ temp/
 # End of https://www.gitignore.io/api/visualstudiocode,macos,node
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
-static/
+static/**/
 db/
 *pm2.json
